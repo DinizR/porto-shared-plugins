@@ -1,0 +1,46 @@
+# Copy to plugins/client-adapters/{app}/identity-store-jdbc-{env}.yaml
+# and point the SQL at that application's tables. Aliases are the contract.
+
+configs:
+  - key: datasource
+    value: YOUR_DATASOURCE_ID
+  - key: sql.dialect
+    value: h2
+
+queries:
+  - dialect: h2
+    statements:
+      - name: FIND_IDENTITY_BY_USERNAME
+        sql: |
+          SELECT id, username, email, status, password_expires_at
+          FROM users
+          WHERE username = ?
+      - name: FIND_IDENTITY_BY_SUBJECT
+        sql: |
+          SELECT id, username, email, status, password_expires_at
+          FROM users
+          WHERE CAST(id AS VARCHAR) = ?
+      - name: FIND_IDENTITY_SECRET_HASH
+        sql: |
+          SELECT password_hash FROM users WHERE username = ?
+      - name: REPLACE_IDENTITY_SECRET
+        sql: |
+          UPDATE users
+             SET password_hash = ?, password_expires_at = NULL
+           WHERE username = ?
+      - name: LIST_IDENTITY_PROFILES
+        sql: |
+          SELECT r.name
+            FROM users u
+            JOIN user_roles ur ON ur.user_id = u.id
+            JOIN roles r ON r.id = ur.role_id
+           WHERE CAST(u.id AS VARCHAR) = ?
+           ORDER BY r.name
+      - name: LIST_IDENTITY_PERMISSIONS
+        sql: |
+          SELECT DISTINCT rp.permission_code
+            FROM users u
+            JOIN user_roles ur ON ur.user_id = u.id
+            JOIN role_permissions rp ON rp.role_id = ur.role_id
+           WHERE CAST(u.id AS VARCHAR) = ?
+           ORDER BY rp.permission_code

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>systems.porto</groupId>
+        <artifactId>porto-api-plugins</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>porto-shared-plugins</artifactId>
+    <packaging>pom</packaging>
+    <description>Infrastructural adapters and auth flow reusable by any porto-api application</description>
+    <modules>
+        <module>client-adapters/document-storage-s3</module>
+        <module>client-adapters/e-sign-docusign</module>
+        <module>client-adapters/email-smtp</module>
+        <module>client-adapters/document-render-thymeleaf</module>
+        <module>client-adapters/identity-store-jdbc</module>
+        <module>client-adapters/local-idp</module>
+        <module>client-adapters/keycloak-idp</module>
+        <module>processors/auth-token</module>
+        <module>entry-adapters/auth-token-rest</module>
+    </modules>
+</project>
